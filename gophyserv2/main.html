@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+</head>
+<body>
+    <style type='text/css'>
+        body {
+            background-image: url('https://66.media.tumblr.com/f363bc2f0d655d3505dbb16dae0119e2/tumblr_ogli3pzLfd1smiv11o1_400.png');
+            background-repeat:no-repeat;
+            background-size:cover;
+            padding: 0 30% 0 30%;
+        }
+
+        #app {
+            display: flex;
+            flex-flow: column;
+        }
+
+        h1 {
+            font-family: 'Monoton';
+        }
+
+        input, button {
+            height: 3rem;
+
+            background:tan;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: large;
+        }
+
+        input, button, img {
+            border: 0.5rem solid fuchsia;
+            border-radius: 1rem;
+            margin: 1rem 0;
+        }
+
+    </style>
+    <div id='app'>
+        <h1>Search for a gif</h1>
+        <input type='text' v-model='gifInput' placeholder='Type here to search for a gif' >
+        <button type='button' @click='fetchGif()'>Click here to get a gif</button>
+        <img :src='gifUrl'>
+    </div>
+
+    <script src='https://unpkg.com/vue@next'></script>
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+
+    <script>
+        const app = Vue.createApp(
+            {
+                data() {
+                    return {
+                        gifUrl: 'https://media.giphy.com/media/LXtjHzZjC5WLu/giphy.gif',
+                        gifInput: null,
+                        error: null
+                    }
+                },
+                methods: {
+                    fetchGif() {
+                        let self = this;
+                        if (!self.input) {
+                            self.error = 'provide an input';
+                        }
+                        axios.get(`/api/gif/${this.gifInput}`)
+                            .then(function (response) {
+                                self.gifUrl = response.data;
+                            })
+                            .catch(function (error) {
+                                self.error = 'API problem!';
+                            });
+                    }
+                }
+            }
+        ).mount('#app');
+    </script>
+</body>

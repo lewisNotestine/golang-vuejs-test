@@ -9,21 +9,16 @@ import (
 	"encoding/json"
 )
 
-// type gifDatum struct {
-
-// }
-
-type gifImage struct {
-	// FixedHeightSmall gifDatum `json:"fixed_height_small"`
+type GifImage struct {
 	Url string `json:"url"`
 }
 
-type gifData struct {
-	Images map[string]gifImage `json:"images"`
+type GifData struct {
+	Images map[string]GifImage `json:"images"`
 }
 
-type GifJson struct {
-	Data gifData `json:"data"`
+type GifResponse struct {
+	Data GifData `json:"data"`
 }
 
 const apiKeyEnvtVar string = "GIPHY_API_KEY"
@@ -40,20 +35,16 @@ func GetGifUrl(gifInput string) string {
 		fmt.Println("failed to read response", ioErr)
 	}
 
-	fmt.Println("gifJson is", gifJson)
-
-	var gifData GifJson
-	if serializeErr := json.Unmarshal(gifJson, &gifData); serializeErr != nil {
+	var gifResponse GifResponse
+	if serializeErr := json.Unmarshal(gifJson, &gifResponse); serializeErr != nil {
 		fmt.Println("failed to unmarshal:", serializeErr)
 	}
 
-	fmt.Println("gifData is", gifData)
-	return gifData.Data.Images["fixed_height_small"].Url
+	return gifResponse.Data.Images["fixed_height_small"].Url
 }
 
 func getApiKeyParam() string {
 	apiKey := os.Getenv(apiKeyEnvtVar)
-	fmt.Println("api key is", apiKey)
 	return "?api_key=" + apiKey
 }
 
@@ -67,7 +58,5 @@ func getApiUrl(gifInput string) string {
 	sb.WriteString(getApiKeyParam())
 	sb.WriteString(getTranslateParam(gifInput))
 
-	str := sb.String()
-	fmt.Println("url is", str)
-	return str
+	return sb.String()
 }
