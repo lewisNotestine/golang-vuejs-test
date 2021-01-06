@@ -20,6 +20,4 @@ I made "Gophy", an app to learn golang and vue.js
 3. run: `go run gophyserv2`
 4. view in browser: `http://localhost:8080/view/main`
 
-## Enjoy
-
-![](https://imgur.com/aEeR9av)
+![Enjoy](https://imgur.com/aEeR9av)
